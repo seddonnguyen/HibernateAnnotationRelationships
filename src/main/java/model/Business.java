@@ -30,7 +30,6 @@ public class Business {
     @Transient
     private Set<Employee> employees;
 
-
     public Business() {
         this.stores = new HashSet<>();
         this.employees = new HashSet<>();
