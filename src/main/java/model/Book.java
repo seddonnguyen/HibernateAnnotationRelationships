@@ -6,7 +6,6 @@ import lombok.NonNull;
 
 import java.util.*;
 
-
 @Entity
 @Data
 public class Book {

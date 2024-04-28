@@ -3,7 +3,6 @@ package model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NonNull;
-import org.hibernate.annotations.Formula;
 
 import java.util.HashSet;
 import java.util.Set;
