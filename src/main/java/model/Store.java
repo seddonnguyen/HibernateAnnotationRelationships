@@ -19,17 +19,21 @@ public class Store {
     private String name;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "business_id")
     private Business business;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
+
 
     @ManyToMany(mappedBy = "stores", cascade = CascadeType.ALL)
     private Set<Book> books;
 
+
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private Set<Employee> employees;
+
 
     public Store() {
         this.books = new HashSet<>();

@@ -21,7 +21,7 @@ public class Business {
     private String EIN;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)

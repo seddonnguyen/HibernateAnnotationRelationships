@@ -28,6 +28,12 @@ public class Address {
     @NonNull
     private String zipCode;
 
+    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
+    private Business business;
+
+    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
+    private Store store;
+
     public Address(String street, String city, String state, String zipCode) {
         this.street = street;
         this.street2 = "";

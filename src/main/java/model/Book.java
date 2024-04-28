@@ -24,7 +24,6 @@ public class Book {
     @JoinTable(name = "book_store", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "store_id"))
     private Set<Store> stores;
 
-
     @ManyToMany(mappedBy = "books", cascade = CascadeType.ALL)
     private Set<Author> authors;
 
