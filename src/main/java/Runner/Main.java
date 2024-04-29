@@ -9,7 +9,6 @@ import org.hibernate.cfg.Configuration;
 import java.util.Set;
 
 public class Main {
-
     public static void main(String[] args) {
 
         try (SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
@@ -17,7 +16,7 @@ public class Main {
 
             populate(session);
             //displayResults(session);
-            //deleteAuthor(session, 1L);
+            deleteAuthor(session, 1L);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,7 +37,6 @@ public class Main {
             Address address3 = new Address("789 Oak St", "Apt 3", "New York", "NY", "10003");
             Address address4 = new Address("101 Pine St", "Apt 4", "New York", "NY", "10004");
             Address address5 = new Address("112 Maple St", "Apt 5", "New York", "NY", "10005");
-
 
             Business business1 = new Business("Business 1", "135791113");
             Business business2 = new Business("Business 2", "2468101214");
@@ -80,7 +78,6 @@ public class Main {
             store3.addEmployee(employee7);
             store3.addEmployee(employee1);
 
-
             Author author1 = new Author("John", "Doe");
             Author author2 = new Author("Jane", "Doe");
             Author author3 = new Author("Alice", "Smith");
@@ -88,19 +85,6 @@ public class Main {
             Book book1 = new Book("Book 1", "123456789");
             Book book2 = new Book("Book 2", "987654321");
             Book book3 = new Book("Book 3", "123789456");
-
-            //author1.addBook(book1);
-            //author1.addBook(book2);
-            //author1.addBook(book3);
-            //
-            //author2.addBook(book1);
-            //author2.addBook(book2);
-            //author2.addBook(book3);
-            //
-            //author3.addBook(book1);
-            //author3.addBook(book2);
-            //author3.addBook(book3);
-
 
             book1.addAuthor(author1);
             book1.addAuthor(author2);
@@ -114,37 +98,23 @@ public class Main {
             book3.addAuthor(author2);
             book3.addAuthor(author3);
 
+            store1.addBook(book1);
+            store1.addBook(book2);
+            store1.addBook(book3);
 
-            //store1.addBook(book1);
-            //store1.addBook(book2);
-            //store1.addBook(book3);
-            //
-            //store2.addBook(book1);
-            //store2.addBook(book2);
-            //store2.addBook(book3);
-            //
-            //store3.addBook(book1);
-            //store3.addBook(book2);
-            //store3.addBook(book3);
+            store2.addBook(book1);
+            store2.addBook(book2);
+            store2.addBook(book3);
 
-            book1.addStore(store1);
-            book1.addStore(store2);
-            book1.addStore(store3);
-
-            book2.addStore(store1);
-            book2.addStore(store2);
-            book2.addStore(store3);
-
-            book3.addStore(store1);
-            book3.addStore(store2);
-            book3.addStore(store3);
+            store3.addBook(book1);
+            store3.addBook(book2);
+            store3.addBook(book3);
 
             session.persist(store1);
             session.persist(store2);
             session.persist(store3);
 
             transaction.commit();
-
 
             System.out.println("--------------------------------------------------");
             System.out.println("Database populated successfully");
@@ -155,6 +125,47 @@ public class Main {
             }
             e.printStackTrace();
         }
+    }
+
+    public static void deleteAuthor(Session session, Long id) {
+        Transaction transaction = null;
+        try {
+            session.clear();
+            transaction = session.beginTransaction();
+
+            System.out.println("--------------------------------------------------");
+            System.out.println("Deleting Author by ID");
+            System.out.println("--------------------------------------------------");
+            Author author = getAuthorById(session, id);
+            session.remove(author);
+
+            transaction.commit();
+
+            System.out.println("--------------------------------------------------");
+            System.out.println("Author deleted successfully");
+            System.out.println("--------------------------------------------------");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static Author getAuthorById(Session session, Long id) {
+        Author author = session.get(Author.class, id);
+        String fullName = author.getFullName();
+        Set<Book> books = author.getBooks();
+
+        System.out.printf("Author Name: %s%n", fullName);
+        System.out.printf("Number of Books: %d%n", books.size());
+
+        for (Book book : books) {
+            System.out.println("--------------------");
+            System.out.printf("Book Title: %s%n", book.getTitle());
+            System.out.printf("Book ISBN: %s%n", book.getIsbn());
+        }
+        return author;
     }
 
     public static void displayResults(Session session) {
@@ -184,7 +195,7 @@ public class Main {
         getEmployeeById(session, 1L);
     }
 
-    public static void getBookById(Session session, Long id) {
+    public static Book getBookById(Session session, Long id) {
         Book book = session.get(Book.class, id);
         String title = book.getTitle();
         Set<Store> stores = book.getStores();
@@ -206,9 +217,10 @@ public class Main {
         for (Store store : stores) {
             System.out.printf("Store Name: %s%n", store.getName());
         }
+        return book;
     }
 
-    public static void getStoreById(Session session, Long id) {
+    public static Store getStoreById(Session session, Long id) {
         Store store = session.get(Store.class, id);
         String name = store.getName();
         Set<Book> books = store.getBooks();
@@ -239,24 +251,10 @@ public class Main {
                 System.out.printf("Author Name: %s%n", author.getFullName());
             }
         }
+        return store;
     }
 
-    public static void getAuthorById(Session session, Long id) {
-        Author author = session.get(Author.class, id);
-        String fullName = author.getFullName();
-        Set<Book> books = author.getBooks();
-
-        System.out.printf("Author Name: %s%n", fullName);
-        System.out.printf("Number of Books: %d%n", books.size());
-
-        for (Book book : books) {
-            System.out.println("--------------------");
-            System.out.printf("Book Title: %s%n", book.getTitle());
-            System.out.printf("Book ISBN: %s%n", book.getIsbn());
-        }
-    }
-
-    public static void getBusinessById(Session session, Long id) {
+    public static Business getBusinessById(Session session, Long id) {
         Business business = session.get(Business.class, id);
         String name = business.getName();
         Set<Store> stores = business.getStores();
@@ -278,9 +276,10 @@ public class Main {
         for (Employee employee : business.getEmployees()) {
             System.out.printf("Employee Name: %s%n", employee.getFullName());
         }
+        return business;
     }
 
-    public static void getEmployeeById(Session session, Long id) {
+    public static Employee getEmployeeById(Session session, Long id) {
         Employee employee = session.get(Employee.class, id);
         String fullName = employee.getFullName();
         Store store = employee.getStore();
@@ -292,24 +291,6 @@ public class Main {
         System.out.printf("Store Address: %s%n", store.getAddress());
         System.out.printf("Employer: %s%n", business.getName());
         System.out.printf("Employer Address: %s%n", business.getAddress());
+        return employee;
     }
-
-    public static void deleteAuthor(Session session, Long id) {
-        Transaction transaction = null;
-        try {
-
-            transaction = session.beginTransaction();
-
-            Author author = session.get(Author.class, id);
-            session.remove(author);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
 }
