@@ -26,7 +26,7 @@ public class Employee {
     @NonNull
     private String SSN;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
 

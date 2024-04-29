@@ -18,7 +18,7 @@ public class Store {
     @NonNull
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "business_id")
     private Business business;
 

@@ -20,7 +20,7 @@ public class Book {
     @NonNull
     private String isbn;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "book_store", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "store_id"))
     private Set<Store> stores;
 

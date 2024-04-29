@@ -16,31 +16,8 @@ public class Main {
              Session session = sessionFactory.openSession()) {
 
             populate(session);
-
-            System.out.println("--------------------------------------------------");
-            System.out.println("Get Book and Store by ID");
-            System.out.println("--------------------------------------------------");
-            getBookById(session, 1L);
-
-            System.out.println("--------------------------------------------------");
-            System.out.println("Get Store and Book by ID");
-            System.out.println("--------------------------------------------------");
-            getStoreById(session, 1L);
-
-            System.out.println("--------------------------------------------------");
-            System.out.println("Get Author and Book by ID");
-            System.out.println("--------------------------------------------------");
-            getAuthorById(session, 1L);
-
-            System.out.println("--------------------------------------------------");
-            System.out.println("Get Business and Store by ID");
-            System.out.println("--------------------------------------------------");
-            getBusinessById(session, 1L);
-
-            System.out.println("--------------------------------------------------");
-            System.out.println("Get Employee by ID");
-            System.out.println("--------------------------------------------------");
-            getEmployeeById(session, 1L);
+            //displayResults(session);
+            //deleteAuthor(session, 1L);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,8 +43,8 @@ public class Main {
             Business business1 = new Business("Business 1", "135791113");
             Business business2 = new Business("Business 2", "2468101214");
 
-            business1.setAddress(address1);
-            business2.setAddress(address2);
+            address1.setBusiness(business1);
+            address2.setBusiness(business2);
 
             Store store1 = new Store("Store 1");
             Store store2 = new Store("Store 2");
@@ -112,35 +89,62 @@ public class Main {
             Book book2 = new Book("Book 2", "987654321");
             Book book3 = new Book("Book 3", "123789456");
 
-            author1.addBook(book1);
-            author1.addBook(book2);
-            author1.addBook(book3);
+            //author1.addBook(book1);
+            //author1.addBook(book2);
+            //author1.addBook(book3);
+            //
+            //author2.addBook(book1);
+            //author2.addBook(book2);
+            //author2.addBook(book3);
+            //
+            //author3.addBook(book1);
+            //author3.addBook(book2);
+            //author3.addBook(book3);
 
-            author2.addBook(book1);
-            author2.addBook(book2);
-            author2.addBook(book3);
 
-            author3.addBook(book1);
-            author3.addBook(book2);
-            author3.addBook(book3);
+            book1.addAuthor(author1);
+            book1.addAuthor(author2);
+            book1.addAuthor(author3);
 
-            store1.addBook(book1);
-            store1.addBook(book2);
-            store1.addBook(book3);
+            book2.addAuthor(author1);
+            book2.addAuthor(author2);
+            book2.addAuthor(author3);
 
-            store2.addBook(book1);
-            store2.addBook(book2);
-            store2.addBook(book3);
+            book3.addAuthor(author1);
+            book3.addAuthor(author2);
+            book3.addAuthor(author3);
 
-            store3.addBook(book1);
-            store3.addBook(book2);
-            store3.addBook(book3);
+
+            //store1.addBook(book1);
+            //store1.addBook(book2);
+            //store1.addBook(book3);
+            //
+            //store2.addBook(book1);
+            //store2.addBook(book2);
+            //store2.addBook(book3);
+            //
+            //store3.addBook(book1);
+            //store3.addBook(book2);
+            //store3.addBook(book3);
+
+            book1.addStore(store1);
+            book1.addStore(store2);
+            book1.addStore(store3);
+
+            book2.addStore(store1);
+            book2.addStore(store2);
+            book2.addStore(store3);
+
+            book3.addStore(store1);
+            book3.addStore(store2);
+            book3.addStore(store3);
 
             session.persist(store1);
             session.persist(store2);
             session.persist(store3);
 
             transaction.commit();
+
 
             System.out.println("--------------------------------------------------");
             System.out.println("Database populated successfully");
@@ -151,6 +155,33 @@ public class Main {
             }
             e.printStackTrace();
         }
+    }
+
+    public static void displayResults(Session session) {
+        System.out.println("--------------------------------------------------");
+        System.out.println("Get Book and Store by ID");
+        System.out.println("--------------------------------------------------");
+        getBookById(session, 1L);
+
+        System.out.println("--------------------------------------------------");
+        System.out.println("Get Store and Book by ID");
+        System.out.println("--------------------------------------------------");
+        getStoreById(session, 1L);
+
+        System.out.println("--------------------------------------------------");
+        System.out.println("Get Author and Book by ID");
+        System.out.println("--------------------------------------------------");
+        getAuthorById(session, 1L);
+
+        System.out.println("--------------------------------------------------");
+        System.out.println("Get Business and Store by ID");
+        System.out.println("--------------------------------------------------");
+        getBusinessById(session, 1L);
+
+        System.out.println("--------------------------------------------------");
+        System.out.println("Get Employee by ID");
+        System.out.println("--------------------------------------------------");
+        getEmployeeById(session, 1L);
     }
 
     public static void getBookById(Session session, Long id) {
@@ -261,6 +292,24 @@ public class Main {
         System.out.printf("Store Address: %s%n", store.getAddress());
         System.out.printf("Employer: %s%n", business.getName());
         System.out.printf("Employer Address: %s%n", business.getAddress());
+    }
+
+    public static void deleteAuthor(Session session, Long id) {
+        Transaction transaction = null;
+        try {
+
+            transaction = session.beginTransaction();
+
+            Author author = session.get(Author.class, id);
+            session.remove(author);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
 }

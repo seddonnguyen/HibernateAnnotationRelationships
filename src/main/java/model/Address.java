@@ -28,10 +28,9 @@ public class Address {
     @NonNull
     private String zipCode;
 
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "address")
     private Business business;
-
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "address")
     private Store store;
 
     public Address(String street, String city, String state, String zipCode) {
@@ -48,6 +47,11 @@ public class Address {
         this.city = city;
         this.state = state;
         this.zipCode = zipCode;
+    }
+
+    public void setBusiness(Business business) {
+        this.business = business;
+        business.setAddress(this);
     }
 
     @Override
