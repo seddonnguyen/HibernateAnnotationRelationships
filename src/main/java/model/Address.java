@@ -30,6 +30,7 @@ public class Address {
 
     @OneToOne(mappedBy = "address")
     private Business business;
+
     @OneToOne(mappedBy = "address")
     private Store store;
 
@@ -52,6 +53,11 @@ public class Address {
     public void setBusiness(Business business) {
         this.business = business;
         business.setAddress(this);
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+        store.setAddress(this);
     }
 
     @Override

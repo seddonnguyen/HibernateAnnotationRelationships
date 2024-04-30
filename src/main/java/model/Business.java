@@ -24,9 +24,9 @@ public class Business {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Store> stores;
-
+    
     @Transient
     private Set<Employee> employees;
 
@@ -40,6 +40,13 @@ public class Business {
         this.EIN = EIN;
         this.stores = new HashSet<>();
         this.employees = new HashSet<>();
+    }
+
+    public void removeAddress() {
+        if (this.address != null) {
+            this.address.setBusiness(null);
+            this.address = null;
+        }
     }
 
     public void addStore(Store store) {

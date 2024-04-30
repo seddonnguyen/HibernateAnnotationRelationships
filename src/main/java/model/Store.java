@@ -29,7 +29,7 @@ public class Store {
     @ManyToMany(mappedBy = "stores", cascade = CascadeType.ALL)
     private Set<Book> books;
 
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Employee> employees;
 
     public Store() {
@@ -41,6 +41,23 @@ public class Store {
         this.name = name;
         this.books = new HashSet<>();
         this.employees = new HashSet<>();
+    }
+
+    public void removeAddress() {
+        if (this.address != null) {
+            this.address.setStore(null);
+            this.address = null;
+        }
+    }
+
+    public void addBusiness(Business business) {
+        this.business = business;
+        business.getStores().add(this);
+    }
+
+    public void removeBusiness(Business business) {
+        this.business = null;
+        business.getStores().remove(this);
     }
 
     public void addBook(Book book) {
